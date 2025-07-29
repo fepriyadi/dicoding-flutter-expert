@@ -22,11 +22,11 @@ class _TVPageState extends State<TVPage> {
     super.initState();
     Future.microtask(() async {
       final tvNotifier = Provider.of<TvNotifier>(context, listen: false);
-      if(widget.category == TV_POPULAR){
+      if (widget.category == TV_POPULAR) {
         await tvNotifier.fetchPopularTV();
-      }else if(widget.category == TV_ONAIR){
+      } else if (widget.category == TV_ONAIR) {
         await tvNotifier.fetchOnAirTV();
-      }else{
+      } else {
         await tvNotifier.fetchTopRatedTV();
       }
     });
@@ -44,15 +44,13 @@ class _TVPageState extends State<TVPage> {
           builder: (context, data, child) {
             RequestState state;
             List<TV> dataSeries;
-            if(widget.category == TV_POPULAR){
-                state = data.popularState;
-                dataSeries = data.seriesPopular;
-            }
-            else if(widget.category == TV_ONAIR){
-                state = data.onAirState;
-                dataSeries = data.seriesOnAir;
-            }
-            else{
+            if (widget.category == TV_POPULAR) {
+              state = data.popularState;
+              dataSeries = data.seriesPopular;
+            } else if (widget.category == TV_ONAIR) {
+              state = data.onAirState;
+              dataSeries = data.seriesOnAir;
+            } else {
               state = data.topRatedState;
               dataSeries = data.seriesTopRated;
             }

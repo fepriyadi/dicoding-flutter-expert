@@ -25,7 +25,8 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
   void initState() {
     super.initState();
     Future.microtask(() async {
-      final movieNotifier = Provider.of<MovieListNotifier>(context, listen: false);
+      final movieNotifier =
+          Provider.of<MovieListNotifier>(context, listen: false);
       await movieNotifier.fetchNowPlayingMovies();
       await movieNotifier.fetchPopularMovies();
       await movieNotifier.fetchTopRatedMovies();
@@ -97,8 +98,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
             children: [
               _buildSubHeading(
                 title: 'TV popular',
-                onTap: () =>
-                    Navigator.pushNamed(context, ROUTE_POPULAR),
+                onTap: () => Navigator.pushNamed(context, ROUTE_POPULAR),
               ),
               Consumer<TvNotifier>(builder: (context, data, child) {
                 final state = data.popularState;
@@ -114,8 +114,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               }),
               _buildSubHeading(
                 title: 'TV On Air',
-                onTap: () =>
-                    Navigator.pushNamed(context, ROUTE_ONAIR),
+                onTap: () => Navigator.pushNamed(context, ROUTE_ONAIR),
               ),
               Consumer<TvNotifier>(builder: (context, data, child) {
                 final state = data.onAirState;
@@ -131,8 +130,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               }),
               _buildSubHeading(
                 title: 'TV Top Rated',
-                onTap: () =>
-                    Navigator.pushNamed(context, ROUTE_TOPRATED),
+                onTap: () => Navigator.pushNamed(context, ROUTE_TOPRATED),
               ),
               Consumer<TvNotifier>(builder: (context, data, child) {
                 final state = data.topRatedState;
@@ -179,7 +177,6 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                   return Text('Failed');
                 }
               }),
-
               Consumer<MovieListNotifier>(builder: (context, data, child) {
                 final state = data.popularMoviesState;
                 if (state == RequestState.Loading) {

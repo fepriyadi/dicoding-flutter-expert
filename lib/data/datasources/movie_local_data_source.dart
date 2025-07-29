@@ -7,7 +7,6 @@ abstract class MovieLocalDataSource {
   Future<String> removeWatchlist(MovieTable movie);
   Future<MovieTable?> getMovieById(int id);
   Future<List<MovieTable>> getWatchlistMovies();
-
 }
 
 class MovieLocalDataSourceImpl implements MovieLocalDataSource {

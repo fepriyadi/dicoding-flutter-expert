@@ -40,12 +40,14 @@ void init() {
   );
 
   locator.registerFactory(
-        () => TvNotifier(locator(),
+    () => TvNotifier(
+      locator(),
     ),
   );
 
   locator.registerFactory(
-        () => TVDetailNotifier(getTV: locator(),
+    () => TVDetailNotifier(
+      getTV: locator(),
     ),
   );
   locator.registerFactory(
@@ -101,7 +103,7 @@ void init() {
   );
 
   locator.registerLazySingleton<TvRepository>(
-        () => TvRepositoryImpl(
+    () => TvRepositoryImpl(
       remoteDataSource: locator(),
       localDataSource: locator(),
     ),

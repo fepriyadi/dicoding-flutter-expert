@@ -53,7 +53,6 @@ const kColorScheme = ColorScheme(
   brightness: Brightness.dark,
 );
 
-
 const Color scaffoldColor = Colors.black;
 final TextStyle normalText = GoogleFonts.poppins(
     textStyle: const TextStyle(fontSize: 16, letterSpacing: 0.8));
@@ -63,4 +62,3 @@ final TextStyle heading = GoogleFonts.poppins(
     fontSize: 20,
   ),
 );
-

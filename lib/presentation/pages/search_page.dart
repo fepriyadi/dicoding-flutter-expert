@@ -25,8 +25,7 @@ class SearchPage extends StatelessWidget {
               onSubmitted: (query) {
                 Provider.of<MovieSearchNotifier>(context, listen: false)
                     .fetchMovieSearch(query);
-                Provider.of<TvNotifier>(context, listen: false)
-                    .search(query);
+                Provider.of<TvNotifier>(context, listen: false).search(query);
               },
               decoration: InputDecoration(
                 hintText: 'Search title',
@@ -60,7 +59,11 @@ class SearchPage extends StatelessWidget {
                   );
                 } else {
                   return Expanded(
-                    child: Container( alignment: Alignment.center, padding: EdgeInsets.all(17), child: Text('No tv series found'),),
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(17),
+                      child: Text('No tv series found'),
+                    ),
                   );
                 }
               },
@@ -89,7 +92,11 @@ class SearchPage extends StatelessWidget {
                   );
                 } else {
                   return Expanded(
-                    child: Container( alignment: Alignment.center, padding: EdgeInsets.all(17), child: Text('No Movies found'),),
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(17),
+                      child: Text('No Movies found'),
+                    ),
                   );
                 }
               },

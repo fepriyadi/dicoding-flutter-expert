@@ -236,8 +236,7 @@ class _DetailContentState extends State<DetailContent> {
                                                 Radius.circular(8),
                                               ),
                                               child: CachedNetworkImage(
-                                                imageUrl:
-                                                    movie.poster,
+                                                imageUrl: movie.poster,
                                                 placeholder: (context, url) =>
                                                     Center(
                                                   child:
@@ -291,8 +290,13 @@ class _DetailContentState extends State<DetailContent> {
                                           setState(() {
                                             selectedSeason = value;
                                             Future.microtask(() async {
-                                              Provider.of<TvNotifier>(context, listen: false)
-                                                  .getDetailSeason(movie.id, selectedSeason?.seasonNumber ?? 0);
+                                              Provider.of<TvNotifier>(context,
+                                                      listen: false)
+                                                  .getDetailSeason(
+                                                      movie.id,
+                                                      selectedSeason
+                                                              ?.seasonNumber ??
+                                                          0);
                                             });
                                           });
                                         },
@@ -369,7 +373,8 @@ class _DetailContentState extends State<DetailContent> {
                                                                       imageUrl: data
                                                                           .seasons
                                                                           .posterPath,
-                                                                          fit: BoxFit.cover,
+                                                                      fit: BoxFit
+                                                                          .cover,
                                                                       placeholder:
                                                                           (context, url) =>
                                                                               Center(

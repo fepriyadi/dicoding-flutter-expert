@@ -53,7 +53,7 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
               return ListView.builder(
                 itemBuilder: (context, index) {
                   final movie = data.watchlistMovies[index];
-                  if(movie.isTV == 1)
+                  if (movie.isTV == 1)
                     return TVCard(TV.fromMovie(movie));
                   else
                     return MovieCard(movie);

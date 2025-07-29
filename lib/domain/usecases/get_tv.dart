@@ -18,7 +18,8 @@ class GetTV {
     return repository.getTVRecommendations(id);
   }
 
-  Future<Either<Failure, Season>> getSeasonDetail(int seriesId, int seasonNo) async {
+  Future<Either<Failure, Season>> getSeasonDetail(
+      int seriesId, int seasonNo) async {
     return await repository.getSeasonDetail(seriesId, seasonNo);
   }
 
@@ -45,5 +46,4 @@ class GetTV {
   Future<Either<Failure, List<TV>>> getWatchlistTV() async {
     return await repository.getWatchlistTV();
   }
-
 }

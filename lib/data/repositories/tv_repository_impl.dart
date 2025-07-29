@@ -92,7 +92,8 @@ class TvRepositoryImpl implements TvRepository {
   }
 
   @override
-  Future<Either<Failure, SeasonModel>> getSeasonDetail(int id, int seasonNo) async {
+  Future<Either<Failure, SeasonModel>> getSeasonDetail(
+      int id, int seasonNo) async {
     try {
       final result = await remoteDataSource.getSeasonDetail(id, seasonNo);
       return Right(result);

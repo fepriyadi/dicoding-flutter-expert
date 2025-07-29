@@ -18,8 +18,7 @@ class HorizontalListViewMovies extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         children: [
           const SizedBox(width: 7),
-          for (var i = 0; i < list.length; i++)
-            TVCard(list[i]),
+          for (var i = 0; i < list.length; i++) TVCard(list[i]),
         ],
       ),
     );
@@ -36,20 +35,20 @@ class HorizontalMovieCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(6),
       child: InkWell(
-          child: Container(
-            decoration: BoxDecoration(
+        child: Container(
+          decoration: BoxDecoration(
               boxShadow: kElevationToShadow[8],
               borderRadius: BorderRadius.circular(10)),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                  imageUrl: movie.poster,
-                  fit: BoxFit.cover,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      Container(color: Colors.grey.shade900),
-                ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: CachedNetworkImage(
+              imageUrl: movie.poster,
+              fit: BoxFit.cover,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  Container(color: Colors.grey.shade900),
             ),
           ),
+        ),
       ),
     );
   }

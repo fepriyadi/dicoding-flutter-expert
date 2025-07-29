@@ -20,15 +20,14 @@ class TV {
     required this.overview,
   });
 
-  factory TV.fromMovie(Movie movie) =>
-      TV(
-        id: movie.id,
-        overview: movie.overview ?? '',
-        poster: movie.posterPath ?? '',
-        name: movie.title ?? '',
-        backdrop: '',
-        voteAverage: 0,
-        releaseDate: '');
+  factory TV.fromMovie(Movie movie) => TV(
+      id: movie.id,
+      overview: movie.overview ?? '',
+      poster: movie.posterPath ?? '',
+      name: movie.title ?? '',
+      backdrop: '',
+      voteAverage: 0,
+      releaseDate: '');
 
   double get rating => double.parse(voteAverage.toStringAsFixed(2));
 }
