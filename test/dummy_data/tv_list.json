@@ -1,0 +1,39 @@
+{
+  "page": 1,
+  "results": [
+    {
+      "adult": false,
+      "backdrop_path": "/sKlF9YrVu84DYMDAUZEZDCvDxK2.jpg",
+      "genre_ids": [16, 35, 18, 10765],
+      "id": 244808,
+      "origin_country": ["JP"],
+      "original_language": "ja",
+      "original_name": "THE ANIMATION",
+      "overview": "Overview",
+      "popularity": 1145.9698,
+      "poster_path": "/zlybZJXfu4IpPnWXhnRtobl9BgZ.jpg",
+      "first_air_date": "2025-07-19",
+      "name": "Nukitashi the Animation",
+      "vote_average": 6.417,
+      "vote_count": 6
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/hHMWfDlqKisD5zVcZfz3KEw5U3v.jpg",
+      "genre_ids": [18, 10751],
+      "id": 50821,
+      "origin_country": ["HU"],
+      "original_language": "hu",
+      "original_name": "Barátok közt",
+      "overview": "Miklps introduces viewers into the world of Money and Charm.",
+      "popularity": 501.0407,
+      "poster_path": "/kBBbSgNchtMvsgD6z1oI1RRluHP.jpg",
+      "first_air_date": "1998-10-26",
+      "name": "Among Friends",
+      "vote_average": 3.531,
+      "vote_count": 16
+    }
+  ],
+  "total_pages": 10092,
+  "total_results": 201837
+}
