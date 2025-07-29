@@ -53,7 +53,8 @@ class MovieTable extends Equatable {
       overview: overview,
       posterPath: posterPath,
       title: title,
-      isTV: isTV);
+      isTV: isTV,
+  );
 
   TV toTV() => TV(
         id: this.id,

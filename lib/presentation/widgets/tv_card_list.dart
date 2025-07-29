@@ -35,14 +35,14 @@ class TVCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      movie.name ?? '-',
+                      movie.name.isEmpty ? '-' : movie.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: kHeading6,
                     ),
                     SizedBox(height: 16),
                     Text(
-                      movie.overview ?? '-',
+                      movie.overview.isEmpty ? '-' : movie.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
