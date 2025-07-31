@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/data/models/movie_model.dart';
 import 'package:ditonton/data/models/movie_response.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,13 +10,13 @@ import '../../json_reader.dart';
 void main() {
   final tMovieModel = MovieModel(
     adult: false,
-    backdropPath: "/path.jpg",
+    backdropPath: "$BASE_IMAGE_URL/path.jpg",
     genreIds: [1, 2, 3, 4],
     id: 1,
     originalTitle: "Original Title",
     overview: "Overview",
     popularity: 1.0,
-    posterPath: "/path.jpg",
+    posterPath: "$BASE_IMAGE_URL/path.jpg",
     releaseDate: "2020-05-05",
     title: "Title",
     video: false,
@@ -47,13 +48,13 @@ void main() {
         "results": [
           {
             "adult": false,
-            "backdrop_path": "/path.jpg",
+            "backdrop_path": "$BASE_IMAGE_URL/path.jpg",
             "genre_ids": [1, 2, 3, 4],
             "id": 1,
             "original_title": "Original Title",
             "overview": "Overview",
             "popularity": 1.0,
-            "poster_path": "/path.jpg",
+            "poster_path": "$BASE_IMAGE_URL/path.jpg",
             "release_date": "2020-05-05",
             "title": "Title",
             "video": false,

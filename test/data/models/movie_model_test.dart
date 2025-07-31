@@ -33,6 +33,7 @@ void main() {
     video: false,
     voteAverage: 1,
     voteCount: 1,
+    isTV: 0
   );
 
   test('should be a subclass of Movie entity', () async {

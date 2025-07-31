@@ -1,4 +1,3 @@
-/*
 import 'package:ditonton/common/state_enum.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/presentation/pages/movie_detail_page.dart';
@@ -107,4 +106,3 @@ void main() {
     expect(find.text('Failed'), findsOneWidget);
   });
 }
-*/
