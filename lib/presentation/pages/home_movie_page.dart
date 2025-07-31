@@ -9,7 +9,7 @@ import 'package:ditonton/presentation/bloc/home/home_bloc.dart';
 import 'package:ditonton/presentation/pages/about_page.dart';
 import 'package:ditonton/presentation/pages/search_page.dart';
 import 'package:ditonton/presentation/pages/tv_detail_page.dart';
-import 'package:ditonton/presentation/pages/tv_page.dart';
+import 'package:ditonton/presentation/pages/view_all_page.dart';
 import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
