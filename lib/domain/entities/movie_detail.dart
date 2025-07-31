@@ -1,20 +1,22 @@
+import 'package:ditonton/domain/entities/detail_video.dart';
 import 'package:ditonton/domain/entities/genre.dart';
+import 'package:ditonton/domain/entities/season.dart';
 import 'package:equatable/equatable.dart';
 
-class MovieDetail extends Equatable {
+class MovieDetail extends Equatable implements DetailVideo {
   MovieDetail({
-    required this.adult,
-    required this.backdropPath,
-    required this.genres,
-    required this.id,
-    required this.originalTitle,
-    required this.overview,
-    required this.posterPath,
-    required this.releaseDate,
-    required this.runtime,
-    required this.title,
-    required this.voteAverage,
-    required this.voteCount,
+    this.adult = false,
+    this.backdropPath = '',
+    this.genres = const [],
+    this.id = 0,
+    this.originalTitle = '',
+    this.overview = '',
+    this.posterPath = '',
+    this.releaseDate = '',
+    this.runtime = 0,
+    this.title = '',
+    this.voteAverage = 0,
+    this.voteCount = 0,
   });
 
   final bool adult;
@@ -30,6 +32,8 @@ class MovieDetail extends Equatable {
   final double voteAverage;
   final int voteCount;
 
+  double get rating => double.parse(voteAverage.toStringAsFixed(2));
+
   @override
   List<Object?> get props => [
         adult,
@@ -44,4 +48,8 @@ class MovieDetail extends Equatable {
         voteAverage,
         voteCount,
       ];
+
+  @override
+  // TODO: implement seasons
+  List<Season> get seasons => [];
 }

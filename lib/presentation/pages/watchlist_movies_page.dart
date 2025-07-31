@@ -1,11 +1,12 @@
-import 'package:ditonton/common/state_enum.dart';
 import 'package:ditonton/common/utils.dart';
 import 'package:ditonton/domain/entities/tv.dart';
-import 'package:ditonton/presentation/provider/watchlist_movie_notifier.dart';
+import 'package:ditonton/domain/usecases/get_tv.dart';
+import 'package:ditonton/domain/usecases/get_watchlist_movies.dart';
+import 'package:ditonton/presentation/bloc/wishlist/watch_list_bloc.dart';
 import 'package:ditonton/presentation/widgets/movie_card_list.dart';
 import 'package:ditonton/presentation/widgets/tv_card_list.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WatchlistMoviesPage extends StatefulWidget {
   static const ROUTE_NAME = '/watchlist-movie';
@@ -17,64 +18,57 @@ class WatchlistMoviesPage extends StatefulWidget {
 class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
     with RouteAware {
   @override
-  void initState() {
-    super.initState();
-    Future.microtask(() =>
-        Provider.of<WatchlistMovieNotifier>(context, listen: false)
-            .fetchWatchlistMovies());
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context)!);
-  }
-
-  void didPopNext() {
-    Provider.of<WatchlistMovieNotifier>(context, listen: false)
-        .fetchWatchlistMovies();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Watchlist'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Consumer<WatchlistMovieNotifier>(
-          builder: (context, data, child) {
-            if (data.watchlistState == RequestState.Loading) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (data.watchlistState == RequestState.Loaded) {
-              return ListView.builder(
-                itemBuilder: (context, index) {
-                  final movie = data.watchlistMovies[index];
-                  if (movie.isTV == 1)
-                    return TVCard(TV.fromMovie(movie));
-                  else
-                    return MovieCard(movie);
-                },
-                itemCount: data.watchlistMovies.length,
-              );
-            } else {
-              return Center(
-                key: Key('error_message'),
-                child: Text(data.message),
-              );
-            }
-          },
-        ),
-      ),
-    );
   }
 
   @override
   void dispose() {
     routeObserver.unsubscribe(this);
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return BlocProvider(
+        create: (_) => WatchlistBloc(
+            context.read<GetTV>(), context.read<GetWatchlistMovies>())
+          ..add(GetAllWatchlist()),
+        child: Scaffold(
+            appBar: AppBar(
+              title: Text('Watchlist'),
+            ),
+            body: WatchlistWidget()));
+  }
+}
+
+class WatchlistWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<WatchlistBloc, WatchlistState>(
+        builder: (context, state) {
+      if (state is WatchlistSuccess) {
+        return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                final movie = state.movies[index];
+                if (movie.isTV == 1)
+                  return TVCard(TV.fromMovie(movie));
+                else
+                  return MovieCard(movie);
+              },
+              itemCount: state.movies.length,
+            ));
+      } else if (state is WatchlistActionFailure) {
+        return Center(
+          key: Key('error_message'),
+          child: Text(state.error),
+        );
+      }
+      return Scaffold();
+    });
   }
 }

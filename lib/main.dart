@@ -1,26 +1,27 @@
 import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/common/utils.dart';
+import 'package:ditonton/domain/usecases/get_movie_detail.dart';
+import 'package:ditonton/domain/usecases/get_movie_recommendations.dart';
+import 'package:ditonton/domain/usecases/get_now_playing_movies.dart';
+import 'package:ditonton/domain/usecases/get_popular_movies.dart';
+import 'package:ditonton/domain/usecases/get_top_rated_movies.dart';
+import 'package:ditonton/domain/usecases/get_watchlist_status.dart';
+import 'package:ditonton/domain/usecases/remove_watchlist.dart';
+import 'package:ditonton/domain/usecases/search_movies.dart';
+import 'package:ditonton/injection.dart' as di;
+import 'package:ditonton/presentation/bloc/wishlist/watch_list_bloc.dart';
 import 'package:ditonton/presentation/pages/about_page.dart';
-import 'package:ditonton/presentation/pages/movie_detail_page.dart';
 import 'package:ditonton/presentation/pages/home_movie_page.dart';
-import 'package:ditonton/presentation/pages/popular_movies_page.dart';
 import 'package:ditonton/presentation/pages/search_page.dart';
-import 'package:ditonton/presentation/pages/top_rated_movies_page.dart';
 import 'package:ditonton/presentation/pages/tv_detail_page.dart';
-import 'package:ditonton/presentation/pages/tv_page.dart';
+import 'package:ditonton/presentation/pages/view_all_page.dart';
 import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
-import 'package:ditonton/presentation/provider/movie_detail_notifier.dart';
-import 'package:ditonton/presentation/provider/movie_list_notifier.dart';
-import 'package:ditonton/presentation/provider/movie_search_notifier.dart';
-import 'package:ditonton/presentation/provider/popular_movies_notifier.dart';
-import 'package:ditonton/presentation/provider/top_rated_movies_notifier.dart';
-import 'package:ditonton/presentation/provider/tv_detail_notifier.dart';
-import 'package:ditonton/presentation/provider/tv_notifier.dart';
-import 'package:ditonton/presentation/provider/watchlist_movie_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:ditonton/injection.dart' as di;
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'domain/usecases/get_tv.dart';
+import 'domain/usecases/get_watchlist_movies.dart';
 
 void main() {
   di.init();
@@ -30,87 +31,92 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => di.locator<MovieListNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<TvNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<TVDetailNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<MovieDetailNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<MovieSearchNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<TopRatedMoviesNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<PopularMoviesNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<WatchlistMovieNotifier>(),
-        ),
-      ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData.dark().copyWith(
-          colorScheme: kColorScheme,
-          primaryColor: kRichBlack,
-          scaffoldBackgroundColor: kRichBlack,
-          textTheme: kTextTheme,
-          drawerTheme: kDrawerTheme,
-        ),
-        home: HomeMoviePage(),
-        navigatorObservers: [routeObserver],
-        onGenerateRoute: (RouteSettings settings) {
-          switch (settings.name) {
-            case '/home':
-              return MaterialPageRoute(builder: (_) => HomeMoviePage());
-            case PopularMoviesPage.ROUTE_NAME:
-              return CupertinoPageRoute(builder: (_) => PopularMoviesPage());
-            case TopRatedMoviesPage.ROUTE_NAME:
-              return CupertinoPageRoute(builder: (_) => TopRatedMoviesPage());
-            case ROUTE_POPULAR:
-              return CupertinoPageRoute(builder: (_) => TVPage(TV_POPULAR));
-            case ROUTE_ONAIR:
-              return CupertinoPageRoute(builder: (_) => TVPage(TV_ONAIR));
-            case ROUTE_TOPRATED:
-              return CupertinoPageRoute(builder: (_) => TVPage(TV_TOPRATED));
-            case MovieDetailPage.ROUTE_NAME:
-              final id = settings.arguments as int;
-              return MaterialPageRoute(
-                builder: (_) => MovieDetailPage(id: id),
-                settings: settings,
-              );
-            case TVDetailPage.ROUTE_NAME:
-              final id = settings.arguments as int;
-              return MaterialPageRoute(
-                builder: (_) => TVDetailPage(id: id),
-                settings: settings,
-              );
-            case SearchPage.ROUTE_NAME:
-              return CupertinoPageRoute(builder: (_) => SearchPage());
-            case WatchlistMoviesPage.ROUTE_NAME:
-              return MaterialPageRoute(builder: (_) => WatchlistMoviesPage());
-            case AboutPage.ROUTE_NAME:
-              return MaterialPageRoute(builder: (_) => AboutPage());
-            default:
-              return MaterialPageRoute(builder: (_) {
-                return Scaffold(
-                  body: Center(
-                    child: Text('Page not found :('),
-                  ),
+    return MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider<GetTV>(
+            create: (_) => di.locator<GetTV>(),
+          ),
+          RepositoryProvider<GetNowPlayingMovies>(
+            create: (_) => di.locator<GetNowPlayingMovies>(),
+          ),
+          RepositoryProvider<GetPopularMovies>(
+            create: (_) => di.locator<GetPopularMovies>(),
+          ),
+          RepositoryProvider<GetTopRatedMovies>(
+            create: (_) => di.locator<GetTopRatedMovies>(),
+          ),
+          RepositoryProvider<GetWatchListStatus>(
+            create: (_) => di.locator<GetWatchListStatus>(),
+          ),
+          RepositoryProvider<AddToWatchlist>(
+            create: (_) => di.locator<AddToWatchlist>(),
+          ),
+          RepositoryProvider<RemoveWatchlist>(
+            create: (_) => di.locator<RemoveWatchlist>(),
+          ),
+          RepositoryProvider<SearchMovies>(
+            create: (_) => di.locator<SearchMovies>(),
+          ),
+          RepositoryProvider<GetMovieDetail>(
+            create: (_) => di.locator<GetMovieDetail>(),
+          ),
+          RepositoryProvider<GetMovieRecommendations>(
+            create: (_) => di.locator<GetMovieRecommendations>(),
+          ),
+          RepositoryProvider<GetWatchlistMovies>(
+            create: (_) => di.locator<GetWatchlistMovies>(),
+          )
+        ],
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData.dark().copyWith(
+            colorScheme: kColorScheme,
+            primaryColor: kRichBlack,
+            scaffoldBackgroundColor: kRichBlack,
+            textTheme: kTextTheme,
+            drawerTheme: kDrawerTheme,
+          ),
+          home: HomeMoviePage(),
+          navigatorObservers: [routeObserver],
+          onGenerateRoute: (RouteSettings settings) {
+            switch (settings.name) {
+              case '/home':
+                return MaterialPageRoute(builder: (_) => HomeMoviePage());
+              case ViewAllPage.ROUTE_NAME:
+                final args = settings.arguments as Map<String, dynamic>? ?? {};
+                ;
+                final ContentType type = args['type'] ?? '';
+                final CategoryType categoryType = args['category'] ?? '';
+                return MaterialPageRoute(
+                  builder: (_) => ViewAllPage(
+                      contentType: type, categoryType: categoryType),
+                  settings: settings,
                 );
-              });
-          }
-        },
-      ),
-    );
+              case TVDetailPage.ROUTE_NAME:
+                final args = settings.arguments as Map<String, dynamic>? ?? {};
+                ;
+                final int id = args['id'] ?? 0;
+                final bool isTV = args['isTV'] ?? false;
+                return MaterialPageRoute(
+                  builder: (_) => TVDetailPage(id: id, isTV: isTV),
+                  settings: settings,
+                );
+              case SearchPage.ROUTE_NAME:
+                return CupertinoPageRoute(builder: (_) => SearchPage());
+              case WatchlistMoviesPage.ROUTE_NAME:
+                return MaterialPageRoute(builder: (_) => WatchlistMoviesPage());
+              case AboutPage.ROUTE_NAME:
+                return MaterialPageRoute(builder: (_) => AboutPage());
+              default:
+                return MaterialPageRoute(builder: (_) {
+                  return Scaffold(
+                    body: Center(
+                      child: Text('Page not found :('),
+                    ),
+                  );
+                });
+            }
+          },
+        ));
   }
 }

@@ -1,7 +1,9 @@
+import 'package:ditonton/domain/entities/detail_video.dart';
+import 'package:ditonton/domain/entities/list_recommendations.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/domain/entities/season.dart';
 
-class TV {
+class TV extends RecommendationEntity {
   final String name;
   final String poster;
   final int id;
@@ -30,9 +32,18 @@ class TV {
       releaseDate: '');
 
   double get rating => double.parse(voteAverage.toStringAsFixed(2));
+
+  @override
+  String get title => name;
+
+  List<Object?> get props => [id, name, poster, posterPath];
+
+  @override
+  // TODO: implement posterPath
+  String? get posterPath => poster;
 }
 
-class TVDetail {
+class TVDetail extends DetailVideo {
   final bool adult;
   final int id;
   final String overview;
@@ -58,4 +69,10 @@ class TVDetail {
     this.voteAverage = 0.0,
     this.seasons = const [],
   });
+
+  List<Object?> get props =>
+      [id, poster, posterPath, title, overview, releaseDate, rating, seasons];
+
+  @override
+  String get posterPath => poster;
 }

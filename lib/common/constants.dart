@@ -6,10 +6,6 @@ const String TV_POPULAR = 'popular';
 const String TV_ONAIR = 'on_the_air';
 const String TV_TOPRATED = 'top_rated';
 
-const String ROUTE_POPULAR = '/popular-tv';
-const String ROUTE_ONAIR = '/on-air-tv';
-const String ROUTE_TOPRATED = '/rop_rated';
-
 // colors
 const Color kRichBlack = Color(0xFF000814);
 const Color kOxfordBlue = Color(0xFF001D3D);
@@ -62,3 +58,7 @@ final TextStyle heading = GoogleFonts.poppins(
     fontSize: 20,
   ),
 );
+
+enum ContentType { movie, tv }
+
+enum CategoryType { popular, topRated, onair }

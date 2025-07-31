@@ -3,7 +3,9 @@ import 'package:ditonton/common/failure.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/domain/repositories/movie_repository.dart';
 
-class GetPopularMovies {
+import 'get_movie.dart';
+
+class GetPopularMovies extends GetMovies {
   final MovieRepository repository;
 
   GetPopularMovies(this.repository);

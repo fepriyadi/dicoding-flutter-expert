@@ -1,3 +1,4 @@
+import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:equatable/equatable.dart';
 
@@ -34,13 +35,17 @@ class MovieModel extends Equatable {
 
   factory MovieModel.fromJson(Map<String, dynamic> json) => MovieModel(
         adult: json["adult"],
-        backdropPath: json["backdrop_path"],
+        backdropPath: json['backdrop_path'] != null
+            ? "$BASE_IMAGE_URL" + json['backdrop_path']
+            : "",
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
         id: json["id"],
         originalTitle: json["original_title"],
         overview: json["overview"],
         popularity: json["popularity"].toDouble(),
-        posterPath: json["poster_path"],
+        posterPath: json['poster_path'] != null
+            ? "$BASE_IMAGE_URL" + json['poster_path']
+            : "",
         releaseDate: json["release_date"],
         title: json["title"],
         video: json["video"],
@@ -66,20 +71,20 @@ class MovieModel extends Equatable {
 
   Movie toEntity() {
     return Movie(
-      adult: this.adult,
-      backdropPath: this.backdropPath,
-      genreIds: this.genreIds,
-      id: this.id,
-      originalTitle: this.originalTitle,
-      overview: this.overview,
-      popularity: this.popularity,
-      posterPath: this.posterPath,
-      releaseDate: this.releaseDate,
-      title: this.title,
-      video: this.video,
-      voteAverage: this.voteAverage,
-      voteCount: this.voteCount,
-    );
+        adult: this.adult,
+        backdropPath: this.backdropPath,
+        genreIds: this.genreIds,
+        id: this.id,
+        originalTitle: this.originalTitle,
+        overview: this.overview,
+        popularity: this.popularity,
+        posterPath: this.posterPath,
+        releaseDate: this.releaseDate,
+        title: this.title,
+        video: this.video,
+        voteAverage: this.voteAverage,
+        voteCount: this.voteCount,
+        isTV: 0);
   }
 
   @override

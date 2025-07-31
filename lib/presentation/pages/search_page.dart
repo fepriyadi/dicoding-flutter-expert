@@ -1,15 +1,28 @@
 import 'package:ditonton/common/constants.dart';
-import 'package:ditonton/common/state_enum.dart';
-import 'package:ditonton/presentation/provider/movie_search_notifier.dart';
-import 'package:ditonton/presentation/provider/tv_notifier.dart';
+import 'package:ditonton/domain/usecases/search_movies.dart';
+import 'package:ditonton/presentation/bloc/search/search_bloc.dart';
 import 'package:ditonton/presentation/widgets/movie_card_list.dart';
 import 'package:ditonton/presentation/widgets/tv_card_list.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../common/no_result.dart';
+import '../../domain/usecases/get_tv.dart';
 
 class SearchPage extends StatelessWidget {
   static const ROUTE_NAME = '/search';
 
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return BlocProvider(
+        create: (_) =>
+            SearchBloc(context.read<GetTV>(), context.read<SearchMovies>()),
+        child: SearchPageWidget());
+  }
+}
+
+class SearchPageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,12 +33,11 @@ class SearchPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               onSubmitted: (query) {
-                Provider.of<MovieSearchNotifier>(context, listen: false)
-                    .fetchMovieSearch(query);
-                Provider.of<TvNotifier>(context, listen: false).search(query);
+                context.read<SearchBloc>()..add(SearchData(query: query));
               },
               decoration: InputDecoration(
                 hintText: 'Search title',
@@ -39,25 +51,21 @@ class SearchPage extends StatelessWidget {
               'TV Result',
               style: kHeading6,
             ),
-            Consumer<TvNotifier>(
-              builder: (context, data, child) {
-                if (data.state == RequestState.Loading) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (data.state == RequestState.Loaded) {
-                  final result = data.series;
+            Container(child:
+                BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
+              if (state is SearchLoaded) {
+                if (state.tv.isNotEmpty)
                   return Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.all(8),
                       itemBuilder: (context, index) {
-                        final movie = result[index];
-                        return TVCard(movie);
+                        final tv = state.tv[index];
+                        return TVCard(tv);
                       },
-                      itemCount: result.length,
+                      itemCount: state.tv.length,
                     ),
                   );
-                } else {
+                else
                   return Expanded(
                     child: Container(
                       alignment: Alignment.center,
@@ -65,42 +73,65 @@ class SearchPage extends StatelessWidget {
                       child: Text('No tv series found'),
                     ),
                   );
-                }
-              },
-            ),
+              }
+              if (state is SearchError) {
+                return ErrorPage();
+              } else if (state is SearchLoading) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white54,
+                    strokeWidth: 2,
+                    backgroundColor: Colors.black87,
+                  ),
+                );
+              }
+              return Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(17),
+                  child: Text('No tv series found'),
+              );
+            })),
             Text(
               'Movie Result',
               style: kHeading6,
             ),
-            Consumer<MovieSearchNotifier>(
-              builder: (context, data, child) {
-                if (data.state == RequestState.Loading) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (data.state == RequestState.Loaded) {
-                  final result = data.searchResult;
+            BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
+              if (state is SearchLoaded) {
+                if (state.movies.isNotEmpty)
                   return Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.all(8),
                       itemBuilder: (context, index) {
-                        final movie = data.searchResult[index];
+                        final movie = state.movies[index];
                         return MovieCard(movie);
                       },
-                      itemCount: result.length,
+                      itemCount: state.movies.length,
                     ),
                   );
-                } else {
-                  return Expanded(
-                    child: Container(
+                else
+                  return Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(17),
                       child: Text('No Movies found'),
-                    ),
                   );
-                }
-              },
-            ),
+              }
+              if (state is SearchError) {
+                return ErrorPage();
+              } else if (state is SearchLoading) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white54,
+                    strokeWidth: 2,
+                    backgroundColor: Colors.black87,
+                  ),
+                );
+              }
+              return Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(17),
+                  child: Text('No Movies found'),
+              );
+            })
           ],
         ),
       ),

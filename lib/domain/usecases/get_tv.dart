@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ditonton/domain/entities/detail_video.dart';
 import 'package:ditonton/domain/entities/season.dart';
 import 'package:ditonton/domain/entities/tv.dart';
 import 'package:ditonton/domain/repositories/tv_repository.dart';
@@ -31,12 +32,12 @@ class GetTV {
     return await repository.searchTV(query);
   }
 
-  Future<Either<Failure, String>> saveWatchlist(TVDetail movie) async {
-    return await repository.saveWatchlist(movie);
+  Future<Either<Failure, String>> saveWatchlist(DetailVideo detail) async {
+    return await repository.saveWatchlist(detail);
   }
 
-  Future<Either<Failure, String>> removeWatchlist(TVDetail movie) async {
-    return await repository.removeWatchlist(movie);
+  Future<Either<Failure, String>> removeWatchlist(DetailVideo detail) async {
+    return await repository.removeWatchlist(detail);
   }
 
   Future<bool> isAddedToWatchlist(int id) async {

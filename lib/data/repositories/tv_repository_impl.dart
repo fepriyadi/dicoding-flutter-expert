@@ -6,9 +6,11 @@ import 'package:ditonton/common/failure.dart';
 import 'package:ditonton/data/datasources/movie_local_data_source.dart';
 import 'package:ditonton/data/datasources/movie_remote_data_source.dart';
 import 'package:ditonton/data/models/movie_table.dart';
-import 'package:ditonton/data/models/tv_models.dart';
+import 'package:ditonton/domain/entities/detail_video.dart';
 import 'package:ditonton/domain/entities/tv.dart';
 import 'package:ditonton/domain/repositories/tv_repository.dart';
+
+import '../../domain/entities/season.dart';
 
 class TvRepositoryImpl implements TvRepository {
   final MovieRemoteDataSource remoteDataSource;
@@ -56,10 +58,10 @@ class TvRepositoryImpl implements TvRepository {
   }
 
   @override
-  Future<Either<Failure, String>> saveWatchlist(TVDetail movie) async {
+  Future<Either<Failure, String>> saveWatchlist(DetailVideo detail) async {
     try {
       final result =
-          await localDataSource.insertWatchlist(MovieTable.fromTV(movie));
+          await localDataSource.insertWatchlist(MovieTable.fromTV(detail));
       return Right(result);
     } on DatabaseException catch (e) {
       return Left(DatabaseFailure(e.message));
@@ -69,7 +71,7 @@ class TvRepositoryImpl implements TvRepository {
   }
 
   @override
-  Future<Either<Failure, String>> removeWatchlist(TVDetail movie) async {
+  Future<Either<Failure, String>> removeWatchlist(DetailVideo movie) async {
     try {
       final result =
           await localDataSource.removeWatchlist(MovieTable.fromTV(movie));
@@ -92,8 +94,7 @@ class TvRepositoryImpl implements TvRepository {
   }
 
   @override
-  Future<Either<Failure, SeasonModel>> getSeasonDetail(
-      int id, int seasonNo) async {
+  Future<Either<Failure, Season>> getSeasonDetail(int id, int seasonNo) async {
     try {
       final result = await remoteDataSource.getSeasonDetail(id, seasonNo);
       return Right(result);

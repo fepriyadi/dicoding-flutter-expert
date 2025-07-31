@@ -1,6 +1,6 @@
+import 'package:ditonton/domain/entities/detail_video.dart';
 import 'package:ditonton/domain/entities/tv.dart';
 import 'package:ditonton/domain/entities/movie.dart';
-import 'package:ditonton/domain/entities/movie_detail.dart';
 import 'package:equatable/equatable.dart';
 
 class MovieTable extends Equatable {
@@ -18,7 +18,7 @@ class MovieTable extends Equatable {
     required this.overview,
   });
 
-  factory MovieTable.fromEntity(MovieDetail movie) => MovieTable(
+  factory MovieTable.fromEntity(DetailVideo movie) => MovieTable(
         id: movie.id,
         title: movie.title,
         posterPath: movie.posterPath,
@@ -26,10 +26,10 @@ class MovieTable extends Equatable {
         isTV: 0,
       );
 
-  factory MovieTable.fromTV(TVDetail tv) => MovieTable(
+  factory MovieTable.fromTV(DetailVideo tv) => MovieTable(
       id: tv.id,
       title: tv.title,
-      posterPath: tv.poster,
+      posterPath: tv.posterPath,
       overview: tv.overview,
       isTV: 1);
 
@@ -49,12 +49,12 @@ class MovieTable extends Equatable {
       };
 
   Movie toEntity() => Movie.watchlist(
-      id: id,
-      overview: overview,
-      posterPath: posterPath,
-      title: title,
-      isTV: isTV,
-  );
+        id: id,
+        overview: overview,
+        posterPath: posterPath ?? '',
+        title: title,
+        isTV: isTV,
+      );
 
   TV toTV() => TV(
         id: this.id,

@@ -2,8 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:ditonton/common/failure.dart';
 import 'package:ditonton/domain/entities/movie_detail.dart';
 import 'package:ditonton/domain/repositories/movie_repository.dart';
+import 'package:ditonton/domain/usecases/get_movie.dart';
 
-class RemoveWatchlist {
+class RemoveWatchlist extends GetMovies {
   final MovieRepository repository;
 
   RemoveWatchlist(this.repository);
