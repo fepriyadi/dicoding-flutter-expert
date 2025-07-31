@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ditonton/data/datasources/db/database_helper.dart';
 import 'package:ditonton/data/datasources/movie_local_data_source.dart';
 import 'package:ditonton/data/datasources/movie_remote_data_source.dart';
@@ -18,20 +20,54 @@ import 'package:ditonton/domain/usecases/save_watchlist.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
 import 'package:ditonton/presentation/provider/movie_search_notifier.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
+
+import 'common/ssl_pinning.dart';
 
 
 final locator = GetIt.instance;
 
-void init() {
-  // provider
-  locator.registerFactory(
-    () => MovieSearchNotifier(
-      searchMovies: locator(),
+Future<void> init() async {
+
+  final sslPinning = SslPinningHttpClient();
+  final securityContext = await sslPinning.createContext();
+
+  locator.registerSingleton<SecurityContext>(securityContext);
+  locator.registerSingleton<HttpClient>(
+    HttpClient(context: locator<SecurityContext>())
+      ..badCertificateCallback = (cert, host, port) {
+        return true; // or add checks
+      },
+  );
+
+  locator.registerSingleton<IOClient>(
+    IOClient(locator<HttpClient>()),
+  );
+
+  locator.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
+
+  // data sources
+  locator.registerLazySingleton<MovieRemoteDataSource>(
+          () => MovieRemoteDataSourceImpl(client: locator<IOClient>()));
+  locator.registerLazySingleton<MovieLocalDataSource>(
+          () => MovieLocalDataSourceImpl(databaseHelper: locator()));
+
+
+  locator.registerLazySingleton<MovieRepository>(
+        () => MovieRepositoryImpl(
+      remoteDataSource: locator(),
+      localDataSource: locator(),
     ),
   );
 
-  // use case
+  locator.registerLazySingleton<TvRepository>(
+        () => TvRepositoryImpl(
+      remoteDataSource: locator(),
+      localDataSource: locator(),
+    ),
+  );
+
+  locator.registerLazySingleton(() => GetTV(locator()));
   locator.registerLazySingleton(() => GetNowPlayingMovies(locator()));
   locator.registerLazySingleton(() => GetPopularMovies(locator()));
   locator.registerLazySingleton(() => GetTopRatedMovies(locator()));
@@ -43,32 +79,11 @@ void init() {
   locator.registerLazySingleton(() => RemoveWatchlist(locator()));
   locator.registerLazySingleton(() => GetWatchlistMovies(locator()));
 
-  locator.registerLazySingleton(() => GetTV(locator()));
-
-  // repository
-  locator.registerLazySingleton<MovieRepository>(
-    () => MovieRepositoryImpl(
-      remoteDataSource: locator(),
-      localDataSource: locator(),
+  // provider
+  locator.registerFactory(
+    () => MovieSearchNotifier(
+      searchMovies: locator(),
     ),
   );
 
-  locator.registerLazySingleton<TvRepository>(
-    () => TvRepositoryImpl(
-      remoteDataSource: locator(),
-      localDataSource: locator(),
-    ),
-  );
-
-  // data sources
-  locator.registerLazySingleton<MovieRemoteDataSource>(
-      () => MovieRemoteDataSourceImpl(client: locator()));
-  locator.registerLazySingleton<MovieLocalDataSource>(
-      () => MovieLocalDataSourceImpl(databaseHelper: locator()));
-
-  // helper
-  locator.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
-
-  // external
-  locator.registerLazySingleton(() => http.Client());
 }
