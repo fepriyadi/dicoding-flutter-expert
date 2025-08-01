@@ -86,9 +86,9 @@ class SearchPageWidget extends StatelessWidget {
                 );
               }
               return Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(17),
-                  child: Text('No tv series found'),
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(17),
+                child: Text('No tv series found'),
               );
             })),
             Text(
@@ -110,9 +110,9 @@ class SearchPageWidget extends StatelessWidget {
                   );
                 else
                   return Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(17),
-                      child: Text('No Movies found'),
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(17),
+                    child: Text('No Movies found'),
                   );
               }
               if (state is SearchError) {
@@ -127,9 +127,9 @@ class SearchPageWidget extends StatelessWidget {
                 );
               }
               return Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(17),
-                  child: Text('No Movies found'),
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(17),
+                child: Text('No Movies found'),
               );
             })
           ],

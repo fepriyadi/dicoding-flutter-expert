@@ -1,4 +1,6 @@
-class Season {
+import 'package:equatable/equatable.dart';
+
+class Season extends Equatable {
   final String airDate;
   final int episodeCount;
   final int id;
@@ -20,9 +22,34 @@ class Season {
     this.voteAverage = 0.0,
     this.episodes = const [],
   });
+
+  Map<String, dynamic> toJson() => {
+        'airDate ': airDate,
+        'episodeCount ': episodeCount,
+        'id ': id,
+        'name ': name,
+        'overview ': overview,
+        'posterPath ': posterPath,
+        'seasonNumber ': seasonNumber,
+        'voteAverage ': voteAverage,
+        'episodes ': episodes.map((x) => x.toJson()),
+      };
+
+  @override
+  List<Object?> get props => [
+        airDate,
+        episodeCount,
+        id,
+        name,
+        overview,
+        posterPath,
+        seasonNumber,
+        voteAverage,
+        episodes,
+      ];
 }
 
-class Episode {
+class Episode extends Equatable {
   final int id;
   final String name;
   final int episodeNumber;
@@ -38,4 +65,23 @@ class Episode {
     required this.overview,
     required this.voteAverage,
   });
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "episodeNumber": episodeNumber,
+        "airDate": airDate,
+        "overview": overview,
+        "voteAverage": voteAverage,
+      };
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        episodeNumber,
+        airDate,
+        overview,
+        voteAverage,
+      ];
 }

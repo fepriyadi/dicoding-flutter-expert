@@ -5,6 +5,7 @@ import 'package:ditonton/domain/entities/list_recommendations.dart';
 import 'package:ditonton/domain/entities/tv.dart';
 import 'package:ditonton/domain/usecases/get_movie_detail.dart';
 import 'package:ditonton/domain/usecases/get_movie_recommendations.dart';
+import 'package:ditonton/domain/usecases/get_watchlist_movies.dart';
 import 'package:ditonton/domain/usecases/get_watchlist_status.dart';
 import 'package:ditonton/domain/usecases/remove_watchlist.dart';
 import 'package:ditonton/domain/usecases/save_watchlist.dart';
@@ -21,19 +22,19 @@ import '../../domain/usecases/get_tv.dart';
 import '../bloc/detail/detail_bloc.dart';
 import '../bloc/season/season_bloc.dart';
 
-class TVDetailPage extends StatefulWidget {
+class VideoDetailPage extends StatefulWidget {
   static const ROUTE_NAME = '/tv_detail';
 
   final int id;
   final bool isTV;
 
-  TVDetailPage({required this.id, required this.isTV});
+  VideoDetailPage({required this.id, required this.isTV});
 
   @override
-  _TVDetailPageState createState() => _TVDetailPageState();
+  _VideoDetailPageState createState() => _VideoDetailPageState();
 }
 
-class _TVDetailPageState extends State<TVDetailPage> {
+class _VideoDetailPageState extends State<VideoDetailPage> {
   @override
   Widget build(BuildContext context) {
     return widget.isTV
@@ -134,42 +135,34 @@ class DetailContent extends StatelessWidget {
   Widget build(BuildContext context) {
     var selectedSeason =
         (detail.seasons.isNotEmpty ? detail.seasons.first : null);
-    return isTV()
-        ? MultiBlocProvider(
-            providers: [
-              BlocProvider<FetchSeasonBloc>(
-                create: (context) => FetchSeasonBloc(context.read<GetTV>())
-                  ..add(
-                    FetchSeasonData(
-                      seriesId: detail.id,
-                      seasonNo: selectedSeason?.seasonNumber ?? 0,
-                    ),
-                  ),
+    return MultiBlocProvider(
+      providers: [
+        if (isTV())
+          BlocProvider<FetchSeasonBloc>(
+            create: (context) => FetchSeasonBloc(context.read<GetTV>())
+              ..add(
+                FetchSeasonData(
+                  seriesId: detail.id,
+                  seasonNo: selectedSeason?.seasonNumber ?? 0,
+                ),
               ),
-              BlocProvider<WatchlistBloc>(
-                create: (context) => WatchlistBloc(
-                    context.read<GetTV>(), context.read<GetWatchListStatus>()),
-              ),
-              BlocProvider<WatchlistBloc>(
-                create: (context) => WatchlistBloc(
-                    context.read<GetTV>(), context.read<SaveWatchlist>()),
-              ),
-              BlocProvider<WatchlistBloc>(
-                create: (context) => WatchlistBloc(
-                    context.read<GetTV>(), context.read<RemoveWatchlist>()),
-              ),
-            ],
-            child: DetailBlocContent(
-                isTV: true, detail: detail, recommendations: tvRecommendations),
-          )
-        : BlocProvider<WatchlistBloc>(
+          ),
+        BlocProvider<WatchlistBloc>(
             create: (context) => WatchlistBloc(
-                context.read<GetTV>(), context.read<GetWatchListStatus>()),
-            child: DetailBlocContent(
-                isTV: false,
-                detail: detail,
-                recommendations: movieRecommendations),
-          );
+                context.read<GetTV>(),
+                context.read<SaveWatchlist>(),
+                context.read<RemoveWatchlist>(),
+                context.read<GetWatchListStatus>(),
+                context.read<GetWatchlistMovies>())),
+      ],
+      child: isTV()
+          ? DetailBlocContent(
+              isTV: true, detail: detail, recommendations: tvRecommendations)
+          : DetailBlocContent(
+              isTV: false,
+              detail: detail,
+              recommendations: movieRecommendations),
+    );
   }
 }
 
@@ -190,21 +183,21 @@ class DetailBlocContent extends StatefulWidget {
 class _DetailBlocContentState extends State<DetailBlocContent> {
   late Season? selectedSeason;
   List<RecommendationEntity> recommendations = [];
+  late bool isTV;
+  late ContentType contentType;
 
   @override
   void initState() {
     super.initState();
-    context
-        .read<WatchlistBloc>()
-        .add(CheckWatchlistStatus(widget.detail.id, contentType()));
     selectedSeason =
         (widget.detail.seasons.isNotEmpty ? widget.detail.seasons.first : null);
     recommendations = widget.recommendations;
+    isTV = widget.isTV;
+    contentType = widget.isTV ? ContentType.tv : ContentType.movie;
+    context
+        .read<WatchlistBloc>()
+        .add(CheckWatchlistStatus(widget.detail.id, contentType));
   }
-
-  isTV() => widget.isTV;
-
-  ContentType contentType() => widget.isTV ? ContentType.tv : ContentType.movie;
 
   @override
   Widget build(BuildContext context) {
@@ -251,7 +244,7 @@ class _DetailBlocContentState extends State<DetailBlocContent> {
                               ),
                               WatchListWidget(
                                   detail: widget.detail,
-                                  contentType: contentType()),
+                                  contentType: contentType),
                               Row(
                                 children: [
                                   RatingBarIndicator(
@@ -281,7 +274,7 @@ class _DetailBlocContentState extends State<DetailBlocContent> {
                               ),
                               RecommendationsWidget(
                                 recommendations: recommendations,
-                                isTV: isTV(),
+                                isTV: isTV,
                               ),
                               if (widget.detail.seasons.isNotEmpty)
                                 Column(
@@ -383,7 +376,8 @@ class RecommendationsWidget extends StatelessWidget {
             padding: const EdgeInsets.all(4.0),
             child: InkWell(
               onTap: () {
-                Navigator.pushReplacementNamed(context, TVDetailPage.ROUTE_NAME,
+                Navigator.pushReplacementNamed(
+                    context, VideoDetailPage.ROUTE_NAME,
                     arguments: {
                       'id': movie.id,
                       'isTV': isTV, // or false
@@ -501,7 +495,7 @@ class EpisodeWidget extends StatelessWidget {
                               child: InkWell(
                                 onTap: () {
                                   Navigator.pushReplacementNamed(
-                                      context, TVDetailPage.ROUTE_NAME,
+                                      context, VideoDetailPage.ROUTE_NAME,
                                       arguments: {
                                         'id': episode.id,
                                         'isTV': true, // or false

@@ -39,18 +39,38 @@ class TvModel extends TV {
           : "",
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'poster': poster,
+      'id': id,
+      'backdrop': backdrop,
+      'voteAverage': voteAverage,
+      'releaseDate': releaseDate,
+      'overview': overview
+    };
+  }
 }
 
 class TvModelList {
   final List<TvModel> TVs;
+
   TvModelList({
     required this.TVs,
   });
+
   factory TvModelList.fromJson(Map<String, dynamic> json) {
     return TvModelList(
         TVs: List<TvModel>.from((json["results"] as List)
             .map((list) => TvModel.fromJson(list))
             .where((element) => element.poster.isNotEmpty)));
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'TVs': List<dynamic>.from(TVs.map((x) => x.toJson())),
+    };
   }
 }
 
@@ -99,6 +119,21 @@ class TVDetailModel extends TVDetail {
         voteAverage: (json["vote_average"] ?? 0)?.toDouble(),
         voteCount: json["vote_count"] ?? 0,
       );
+
+  Map<String, dynamic> toJson() {
+    return {
+      'seasons': List<dynamic>.from(seasons.map((x) => x.toJson())),
+      'adult': adult,
+      'backdrop': backdrop,
+      'id': id,
+      'overview': overview,
+      'popularity': popularity,
+      'poster': poster,
+      'releaseDate': releaseDate,
+      'title': title,
+      'voteAverage': voteAverage
+    };
+  }
 }
 
 class EpisodeModel extends Episode {
@@ -185,6 +220,7 @@ class SeasonModel extends Season {
       'poster_path': posterPath,
       'season_number': seasonNumber,
       'vote_average': voteAverage,
+      "episodes": List<dynamic>.from(episodes.map((x) => x.toJson())),
     };
   }
 }

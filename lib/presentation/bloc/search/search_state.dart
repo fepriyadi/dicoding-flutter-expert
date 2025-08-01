@@ -1,11 +1,19 @@
 part of 'search_bloc.dart';
 
 @immutable
-abstract class SearchState {}
+abstract class SearchState extends Equatable {}
 
-class SearchInitial extends SearchState {}
+class SearchInitial extends SearchState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
 
-class SearchLoading extends SearchState {}
+class SearchLoading extends SearchState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
 
 class SearchLoaded extends SearchState {
   final List<TV> tv;
@@ -14,6 +22,10 @@ class SearchLoaded extends SearchState {
     required this.tv,
     required this.movies,
   });
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [tv, movies];
 }
 
 class SearchError extends SearchState {
@@ -21,10 +33,18 @@ class SearchError extends SearchState {
   SearchError({
     required this.error,
   });
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [error];
 }
 
-class DataError {
+class DataError extends Equatable {
   final String message;
 
   DataError(this.message);
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [message];
 }

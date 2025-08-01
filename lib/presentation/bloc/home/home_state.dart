@@ -1,11 +1,19 @@
 part of 'home_bloc.dart';
 
 @immutable
-abstract class HomeState {}
+abstract class HomeState extends Equatable {}
 
-class HomeInitial extends HomeState {}
+class HomeInitial extends HomeState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
 
-class HomeLoading extends HomeState {}
+class HomeLoading extends HomeState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
 
 class HomeLoaded extends HomeState {
   final List<TV> tranding;
@@ -22,6 +30,17 @@ class HomeLoaded extends HomeState {
     required this.moviePopular,
     required this.movieTopRated,
   });
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+        tranding,
+        upcoming,
+        toprated,
+        movieNowPlaying,
+        movieTopRated,
+        movieNowPlaying
+      ];
 }
 
 class HomeError extends HomeState {
@@ -29,10 +48,18 @@ class HomeError extends HomeState {
   HomeError({
     required this.error,
   });
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [error];
 }
 
-class DataError {
+class DataError extends Equatable {
   final String message;
 
   DataError(this.message);
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [message];
 }

@@ -1,9 +1,8 @@
 import 'package:ditonton/domain/entities/detail_video.dart';
 import 'package:ditonton/domain/entities/genre.dart';
 import 'package:ditonton/domain/entities/season.dart';
-import 'package:equatable/equatable.dart';
 
-class MovieDetail extends Equatable implements DetailVideo {
+class MovieDetail extends DetailVideo {
   MovieDetail({
     this.adult = false,
     this.backdropPath = '',

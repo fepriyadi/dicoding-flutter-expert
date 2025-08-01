@@ -1,17 +1,29 @@
 part of 'season_bloc.dart';
 
 @immutable
-abstract class FetchSeasonState {}
+abstract class FetchSeasonState extends Equatable {}
 
-class FetchSeasonInitial extends FetchSeasonState {}
+class FetchSeasonInitial extends FetchSeasonState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
 
-class FetchSeasonLoading extends FetchSeasonState {}
+class FetchSeasonLoading extends FetchSeasonState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
 
 class SeasonDetailLoaded extends FetchSeasonState {
   final Season season;
   SeasonDetailLoaded({
     required this.season,
   });
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [season];
 }
 
 class SeasonError extends FetchSeasonState {
@@ -19,10 +31,18 @@ class SeasonError extends FetchSeasonState {
   SeasonError({
     required this.error,
   });
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [error];
 }
 
-class DataError {
+class DataError extends Equatable {
   final String message;
 
   DataError(this.message);
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [message];
 }

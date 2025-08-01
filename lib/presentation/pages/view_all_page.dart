@@ -25,19 +25,26 @@ class ViewAllPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (_) => ViewAllBloc(
-              context.read<GetTV>(), context.read<GetNowPlayingMovies>()),
-        ),
-        BlocProvider<ViewAllBloc>(
-          create: (context) => ViewAllBloc(
-              context.read<GetTV>(), context.read<GetPopularMovies>()),
-        ),
-        BlocProvider<ViewAllBloc>(
-          create: (context) => ViewAllBloc(
-              context.read<GetTV>(), context.read<GetTopRatedMovies>())
-            ..add(FetchCategoryItems(contentType, categoryType)),
-        ),
+        if (categoryType == CategoryType.onair)
+          BlocProvider(
+            create: (_) => ViewAllBloc(
+                context.read<GetTV>(), context.read<GetNowPlayingMovies>())
+              ..add(FetchCategoryItems(
+                  categoryType: categoryType, type: contentType)),
+          )
+        else if (categoryType == CategoryType.popular)
+          BlocProvider<ViewAllBloc>(
+            create: (context) => ViewAllBloc(
+                context.read<GetTV>(), context.read<GetPopularMovies>())
+              ..add(FetchCategoryItems(
+                  categoryType: categoryType, type: contentType)),
+          )
+        else if (categoryType == CategoryType.topRated)
+          BlocProvider<ViewAllBloc>(
+              create: (context) => ViewAllBloc(
+                  context.read<GetTV>(), context.read<GetTopRatedMovies>())
+                ..add(FetchCategoryItems(
+                    categoryType: categoryType, type: contentType)))
       ],
       child: ViewAllPageWidget(
           contentType: contentType, categoryType: categoryType),

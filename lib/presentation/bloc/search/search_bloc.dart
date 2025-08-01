@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 import '../../../common/failure.dart';

@@ -8,6 +8,10 @@ import 'package:ditonton/presentation/widgets/tv_card_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/usecases/get_watchlist_status.dart';
+import '../../domain/usecases/remove_watchlist.dart';
+import '../../domain/usecases/save_watchlist.dart';
+
 class WatchlistMoviesPage extends StatefulWidget {
   static const ROUTE_NAME = '/watchlist-movie';
 
@@ -34,7 +38,11 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
     // TODO: implement build
     return BlocProvider(
         create: (_) => WatchlistBloc(
-            context.read<GetTV>(), context.read<GetWatchlistMovies>())
+            context.read<GetTV>(),
+            context.read<SaveWatchlist>(),
+            context.read<RemoveWatchlist>(),
+            context.read<GetWatchListStatus>(),
+            context.read<GetWatchlistMovies>())
           ..add(GetAllWatchlist()),
         child: Scaffold(
             appBar: AppBar(

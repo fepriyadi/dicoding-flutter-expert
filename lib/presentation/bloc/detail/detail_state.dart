@@ -1,11 +1,19 @@
 part of 'detail_bloc.dart';
 
 @immutable
-abstract class DetailState {}
+abstract class DetailState extends Equatable {}
 
-class DetailInitial extends DetailState {}
+class DetailInitial extends DetailState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
 
-class DetailLoading extends DetailState {}
+class DetailLoading extends DetailState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
 
 class DetailLoaded extends DetailState {
   final List<TV> recommendation;
@@ -14,6 +22,10 @@ class DetailLoaded extends DetailState {
     required this.recommendation,
     required this.detail,
   });
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [detail, recommendation];
 }
 
 class DetailError extends DetailState {
@@ -21,10 +33,18 @@ class DetailError extends DetailState {
   DetailError({
     required this.error,
   });
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [error];
 }
 
-class DataError {
+class DataError extends Equatable {
   final String message;
 
   DataError(this.message);
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [message];
 }

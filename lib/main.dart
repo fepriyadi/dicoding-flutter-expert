@@ -7,13 +7,13 @@ import 'package:ditonton/domain/usecases/get_popular_movies.dart';
 import 'package:ditonton/domain/usecases/get_top_rated_movies.dart';
 import 'package:ditonton/domain/usecases/get_watchlist_status.dart';
 import 'package:ditonton/domain/usecases/remove_watchlist.dart';
+import 'package:ditonton/domain/usecases/save_watchlist.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
 import 'package:ditonton/injection.dart' as di;
-import 'package:ditonton/presentation/bloc/wishlist/watch_list_bloc.dart';
 import 'package:ditonton/presentation/pages/about_page.dart';
 import 'package:ditonton/presentation/pages/home_movie_page.dart';
 import 'package:ditonton/presentation/pages/search_page.dart';
-import 'package:ditonton/presentation/pages/tv_detail_page.dart';
+import 'package:ditonton/presentation/pages/video_detail_page.dart';
 import 'package:ditonton/presentation/pages/view_all_page.dart';
 import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -54,8 +54,8 @@ class MyApp extends StatelessWidget {
           RepositoryProvider<GetWatchListStatus>(
             create: (_) => di.locator<GetWatchListStatus>(),
           ),
-          RepositoryProvider<AddToWatchlist>(
-            create: (_) => di.locator<AddToWatchlist>(),
+          RepositoryProvider<SaveWatchlist>(
+            create: (_) => di.locator<SaveWatchlist>(),
           ),
           RepositoryProvider<RemoveWatchlist>(
             create: (_) => di.locator<RemoveWatchlist>(),
@@ -98,13 +98,13 @@ class MyApp extends StatelessWidget {
                       contentType: type, categoryType: categoryType),
                   settings: settings,
                 );
-              case TVDetailPage.ROUTE_NAME:
+              case VideoDetailPage.ROUTE_NAME:
                 final args = settings.arguments as Map<String, dynamic>? ?? {};
                 ;
                 final int id = args['id'] ?? 0;
                 final bool isTV = args['isTV'] ?? false;
                 return MaterialPageRoute(
-                  builder: (_) => TVDetailPage(id: id, isTV: isTV),
+                  builder: (_) => VideoDetailPage(id: id, isTV: isTV),
                   settings: settings,
                 );
               case SearchPage.ROUTE_NAME:

@@ -18,17 +18,14 @@ import 'package:ditonton/domain/usecases/get_watchlist_status.dart';
 import 'package:ditonton/domain/usecases/remove_watchlist.dart';
 import 'package:ditonton/domain/usecases/save_watchlist.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
-import 'package:ditonton/presentation/provider/movie_search_notifier.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/io_client.dart';
 
 import 'common/ssl_pinning.dart';
 
-
 final locator = GetIt.instance;
 
 Future<void> init() async {
-
   final sslPinning = SslPinningHttpClient();
   final securityContext = await sslPinning.createContext();
 
@@ -48,20 +45,19 @@ Future<void> init() async {
 
   // data sources
   locator.registerLazySingleton<MovieRemoteDataSource>(
-          () => MovieRemoteDataSourceImpl(client: locator<IOClient>()));
+      () => MovieRemoteDataSourceImpl(client: locator<IOClient>()));
   locator.registerLazySingleton<MovieLocalDataSource>(
-          () => MovieLocalDataSourceImpl(databaseHelper: locator()));
-
+      () => MovieLocalDataSourceImpl(databaseHelper: locator()));
 
   locator.registerLazySingleton<MovieRepository>(
-        () => MovieRepositoryImpl(
+    () => MovieRepositoryImpl(
       remoteDataSource: locator(),
       localDataSource: locator(),
     ),
   );
 
   locator.registerLazySingleton<TvRepository>(
-        () => TvRepositoryImpl(
+    () => TvRepositoryImpl(
       remoteDataSource: locator(),
       localDataSource: locator(),
     ),
@@ -78,12 +74,4 @@ Future<void> init() async {
   locator.registerLazySingleton(() => SaveWatchlist(locator()));
   locator.registerLazySingleton(() => RemoveWatchlist(locator()));
   locator.registerLazySingleton(() => GetWatchlistMovies(locator()));
-
-  // provider
-  locator.registerFactory(
-    () => MovieSearchNotifier(
-      searchMovies: locator(),
-    ),
-  );
-
 }

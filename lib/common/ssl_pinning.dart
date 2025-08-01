@@ -11,5 +11,4 @@ class SslPinningHttpClient {
     securityContext.setTrustedCertificatesBytes(sslCert.buffer.asInt8List());
     return securityContext;
   }
-
 }

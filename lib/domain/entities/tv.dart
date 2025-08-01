@@ -2,8 +2,9 @@ import 'package:ditonton/domain/entities/detail_video.dart';
 import 'package:ditonton/domain/entities/list_recommendations.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/domain/entities/season.dart';
+import 'package:equatable/equatable.dart';
 
-class TV extends RecommendationEntity {
+class TV extends RecommendationEntity implements Equatable {
   final String name;
   final String poster;
   final int id;
@@ -41,6 +42,10 @@ class TV extends RecommendationEntity {
   @override
   // TODO: implement posterPath
   String? get posterPath => poster;
+
+  @override
+  // TODO: implement stringify
+  bool? get stringify => true;
 }
 
 class TVDetail extends DetailVideo {
@@ -75,4 +80,8 @@ class TVDetail extends DetailVideo {
 
   @override
   String get posterPath => poster;
+
+  @override
+  // TODO: implement stringify
+  bool? get stringify => true;
 }

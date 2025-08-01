@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton/common/constants.dart';
+import 'package:ditonton/domain/entities/list_recommendations.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/domain/entities/tv.dart';
 import 'package:ditonton/domain/usecases/get_now_playing_movies.dart';
@@ -8,7 +9,7 @@ import 'package:ditonton/domain/usecases/get_top_rated_movies.dart';
 import 'package:ditonton/presentation/bloc/home/home_bloc.dart';
 import 'package:ditonton/presentation/pages/about_page.dart';
 import 'package:ditonton/presentation/pages/search_page.dart';
-import 'package:ditonton/presentation/pages/tv_detail_page.dart';
+import 'package:ditonton/presentation/pages/video_detail_page.dart';
 import 'package:ditonton/presentation/pages/view_all_page.dart';
 import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
 import 'package:flutter/material.dart';
@@ -226,12 +227,13 @@ class MovieList extends StatelessWidget {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          final movie = isTV() ? tv[index] : movies[index];
+          final movie =
+              isTV() ? tv[index] : movies[index] as RecommendationEntity;
           return Container(
             padding: const EdgeInsets.all(8),
             child: InkWell(
               onTap: () {
-                Navigator.pushNamed(context, TVDetailPage.ROUTE_NAME,
+                Navigator.pushNamed(context, VideoDetailPage.ROUTE_NAME,
                     arguments: {
                       'id': movie.id,
                       'isTV': tv.isNotEmpty, // or false
