@@ -33,7 +33,7 @@ Future<void> init() async {
   locator.registerSingleton<HttpClient>(
     HttpClient(context: locator<SecurityContext>())
       ..badCertificateCallback = (cert, host, port) {
-        return true; // or add checks
+        return false; // or add checks
       },
   );
 

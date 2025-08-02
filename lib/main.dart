@@ -10,6 +10,7 @@ import 'package:ditonton/domain/usecases/remove_watchlist.dart';
 import 'package:ditonton/domain/usecases/save_watchlist.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
 import 'package:ditonton/injection.dart' as di;
+import 'package:ditonton/presentation/bloc/wishlist/watch_list_bloc.dart';
 import 'package:ditonton/presentation/pages/about_page.dart';
 import 'package:ditonton/presentation/pages/home_movie_page.dart';
 import 'package:ditonton/presentation/pages/search_page.dart';
@@ -28,9 +29,15 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    debugPrint("✅ Firebase initialized successfully");
+  } catch (e, s) {
+    debugPrint("❌ Firebase init failed: $e\n$s");
+  }
+
   runApp(MyApp());
 }
 
@@ -110,7 +117,17 @@ class MyApp extends StatelessWidget {
               case SearchPage.ROUTE_NAME:
                 return CupertinoPageRoute(builder: (_) => SearchPage());
               case WatchlistMoviesPage.ROUTE_NAME:
-                return MaterialPageRoute(builder: (_) => WatchlistMoviesPage());
+                return MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                          create: (_) => WatchlistBloc(
+                              context.read<GetTV>(),
+                              context.read<SaveWatchlist>(),
+                              context.read<RemoveWatchlist>(),
+                              context.read<GetWatchListStatus>(),
+                              context.read<GetWatchlistMovies>()),
+                          child:
+                              WatchlistMoviesPage(), // or pass whatever param
+                        ));
               case AboutPage.ROUTE_NAME:
                 return MaterialPageRoute(builder: (_) => AboutPage());
               default:

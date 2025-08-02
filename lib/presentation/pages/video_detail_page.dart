@@ -11,6 +11,7 @@ import 'package:ditonton/domain/usecases/remove_watchlist.dart';
 import 'package:ditonton/domain/usecases/save_watchlist.dart';
 import 'package:ditonton/presentation/bloc/detail_movie/detail_bloc.dart';
 import 'package:ditonton/presentation/bloc/wishlist/watch_list_bloc.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -197,6 +198,14 @@ class _DetailBlocContentState extends State<DetailBlocContent> {
     context
         .read<WatchlistBloc>()
         .add(CheckWatchlistStatus(widget.detail.id, contentType));
+
+    FirebaseAnalytics.instance.logEvent(
+      name: 'select_content',
+      parameters: {
+        'movie_id': widget.detail.id,
+        'movie_title': widget.detail.title,
+      },
+    );
   }
 
   @override

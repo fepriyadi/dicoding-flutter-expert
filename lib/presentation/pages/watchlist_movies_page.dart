@@ -1,16 +1,10 @@
 import 'package:ditonton/common/utils.dart';
 import 'package:ditonton/domain/entities/tv.dart';
-import 'package:ditonton/domain/usecases/get_tv.dart';
-import 'package:ditonton/domain/usecases/get_watchlist_movies.dart';
 import 'package:ditonton/presentation/bloc/wishlist/watch_list_bloc.dart';
 import 'package:ditonton/presentation/widgets/movie_card_list.dart';
 import 'package:ditonton/presentation/widgets/tv_card_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../domain/usecases/get_watchlist_status.dart';
-import '../../domain/usecases/remove_watchlist.dart';
-import '../../domain/usecases/save_watchlist.dart';
 
 class WatchlistMoviesPage extends StatefulWidget {
   static const ROUTE_NAME = '/watchlist-movie';
@@ -21,6 +15,12 @@ class WatchlistMoviesPage extends StatefulWidget {
 
 class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
     with RouteAware {
+  @override
+  void initState() {
+    super.initState();
+    context.read<WatchlistBloc>().add(GetAllWatchlist());
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -33,22 +33,17 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
     super.dispose();
   }
 
+  void didPopNext() {
+    context.read<WatchlistBloc>().add(GetAllWatchlist());
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return BlocProvider(
-        create: (_) => WatchlistBloc(
-            context.read<GetTV>(),
-            context.read<SaveWatchlist>(),
-            context.read<RemoveWatchlist>(),
-            context.read<GetWatchListStatus>(),
-            context.read<GetWatchlistMovies>())
-          ..add(GetAllWatchlist()),
-        child: Scaffold(
-            appBar: AppBar(
-              title: Text('Watchlist'),
-            ),
-            body: WatchlistWidget()));
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Watchlist'),
+        ),
+        body: WatchlistWidget());
   }
 }
 
